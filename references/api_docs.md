@@ -4,19 +4,14 @@ Primary references:
 - https://iexcloud.io/docs/api/
 - https://status.iexapis.com/
 
-## Current Access Note (Date-Sensitive)
-
-As of February 26, 2026:
-- `status.iexapis.com` reports API components as operational.
-- public docs/site availability on `iexcloud.io` can be inconsistent from some networks.
-
-Treat endpoint behavior and status page as source of truth when docs are temporarily unavailable.
-
 ## Base URLs and Auth
 
 - Production base: `https://cloud.iexapis.com/stable`
 - Sandbox base: `https://sandbox.iexapis.com/stable`
 - Authentication: append `token=YOUR_TOKEN` query parameter
+- In this skill, `IEX_TOKEN` is the primary credential and `IEX_CLOUD_TOKEN` is a compatibility alias.
+- OpenClaw users should prefer `skills.entries.iex-cloud.apiKey` backed by the secrets-management system.
+- `IEX_BASE_URL` and `--base-url` are restricted to trusted IEX API hosts. The CLI warns on non-default trusted overrides.
 
 Example pattern:
 
@@ -88,5 +83,10 @@ Operational recommendation:
 - `raw PATH [key=value ...]`
 
 Environment variables:
-- `IEX_TOKEN` or `IEX_CLOUD_TOKEN`
+- `IEX_TOKEN`
+- optional compatibility alias `IEX_CLOUD_TOKEN`
 - optional `IEX_BASE_URL`
+
+Operational guardrails:
+- Use `openclaw secrets configure` if you want OpenClaw to inject the token for agent runs.
+- `raw PATH` accepts only relative API paths. Do not pass full URLs.

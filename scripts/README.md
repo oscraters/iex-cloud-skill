@@ -6,7 +6,10 @@ Local helper for common IEX Cloud REST calls.
 
 - `curl` required
 - `jq` optional (for pretty JSON)
-- token in `IEX_TOKEN` or `IEX_CLOUD_TOKEN`
+- token in `IEX_TOKEN` (preferred)
+- `IEX_CLOUD_TOKEN` accepted as a compatibility alias
+
+For OpenClaw-managed runs, prefer storing the token at `skills.entries.iex-cloud.apiKey` and resolving it through `openclaw secrets configure`.
 
 ## Usage
 
@@ -14,6 +17,8 @@ Local helper for common IEX Cloud REST calls.
 chmod +x scripts/iex_cloud_cli.sh
 scripts/iex_cloud_cli.sh --help
 ```
+
+If you set `IEX_BASE_URL` or pass `--base-url`, the CLI validates that the host is a trusted IEX API domain. Non-default trusted overrides emit a warning to stderr so config changes remain visible in logs and reviews.
 
 ## Examples
 
@@ -33,3 +38,11 @@ Sandbox example:
 ```bash
 scripts/iex_cloud_cli.sh --sandbox quote AAPL
 ```
+
+Trusted custom base URL example:
+
+```bash
+IEX_BASE_URL=https://sandbox.iexapis.com/stable scripts/iex_cloud_cli.sh quote AAPL
+```
+
+`raw` requests must use relative API paths, for example `stock/AAPL/quote`. Full URLs are rejected.
